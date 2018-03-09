@@ -1,0 +1,4 @@
+change makefile HOME to /usr/local
+make, make test
+make clean
+for other codes, put -lsofa_c -lm in this order
