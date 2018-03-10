@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "GMOSS_constants.h"
-#include "GMOSS_functions.h"
+#include <sofa.h>
+
+#define PI 3.14159265
+#define deg2rad(angleDegrees) (angleDegrees * PI / 180.0)
+#define rad2deg(angleRadians) (angleRadians * 180.0 / PI)
 
 double Antenna_beam(double theta_degree, double phi_degree);
 
@@ -59,14 +62,15 @@ int main(void)
 	minute = 00;
 	second = 00;
 		
-	latitude = 30;
-	/*longitude = 77.63245;
-	zone_correction = 5.0+(30.0/60.0);*/
+	site_longitude = 77.5946; // For Bangalore
+	site_latitude = 12.9716;
+	elong = deg2rad(site_longitude);
+	phi = deg2rad(site_latitude);
+		
+	/*zone_correction = 5.0+(30.0/60.0);*/
 	
 	f_out = fopen("Antenna_power_24hr_LST.txt","w");	
-	fclose(f_out);
-	
-	//localtime2lst(year, month, day, hour, minute, second, longitude, zone_correction, &LST);
+	fclose(f_out);	
 	
 	for (LST=0.0; LST<24.0; LST+=1.0)
 	{			
@@ -74,18 +78,26 @@ int main(void)
 		beam_solid_angle = 0.0;
 				
 		fp = fopen("map_150_r4_5deg_nested_galactic_Kelvin.txt","r");
-		//rewind(fp);
-   		for (i=0; i<3072; i++)
+		iauDtf2d("UTC", iy, im, id, ihr, imn, sec, &utc1, &utc2); //UTC Date and time fields into 2-part quasi-JD form	
+		for (i=0; i<3072; i++)
 		{
 			fscanf(fp,"%f",&sky_val);
 			//printf("%f\n",sky_val);
 			
-			gal2equa(gal_lat_coordinate[i], gal_lon_coordinate[i], &alpha, &dec);			
-			equa2horizon(LST, latitude, alpha, dec, &azimuth, &altitude);
-				
-			theta_degree = (90.0 - altitude);
-			theta_radian = theta_degree*PI/180.0;	
-			phi_degree = azimuth;	
+			gal_longitude = deg2rad(gal_lon_coordinate[i]); //Galactic Longitude
+			gal_latitude = deg2rad(gal_lat_coordinate[i]); //Galactic Latitude	
+	
+			iauG2icrs (gal_longitude, gal_latitude, &RA, &dec); //Galactic to ICRS (or RA,Dec if you will)		
+			//printf("RA = %lf \nDec = %lf\n",rad2deg(RA),rad2deg(dec));
+			
+			iauAtco13(RA, dec, 0.0, 0.0, 0.0, 0.0,
+              				utc1, utc2, 0.277,
+              				elong, phi, 0.0, 0.0, 0.0,
+              				1013, 27.0, 50.0, 1e6,
+              				&azi_obs, &zenith_dist_obs, &hob, &dob, &rob, &eo); // This works, cross checked with Stellarium computations
+              				  
+			theta_radian = zenith_dist_obs;	
+			phi_degree = rad2deg(azi_obs);	
 			antenna_power += sky_val*Antenna_beam(theta_degree,phi_degree)*sin(theta_radian); //some error here !!!!!!!!!
 			printf("%f\n", antenna_power);		
 			beam_solid_angle += Antenna_beam(theta_degree,phi_degree)*sin(theta_radian);		

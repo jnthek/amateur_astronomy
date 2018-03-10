@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "GMOSS_constants.h"
+#define PI 3.14159265
 
 double Antenna_beam(double theta_degree, double phi_degree)
 {
