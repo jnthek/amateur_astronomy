@@ -12,5 +12,9 @@ double Antenna_beam(double theta_degree, double phi_degree)
 		theta_radian = theta_degree*PI/180.0;
 		P = cos(theta_radian)*cos(theta_radian);		
 	}
+	else
+	{
+		P=0.0;
+	}
 	return P;
 }
