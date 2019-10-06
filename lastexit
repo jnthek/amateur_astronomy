@@ -1,4 +1,4 @@
-axis=lst,real
-vis=2018_06_29-083314.dat
+axis=freq,real
+vis=2019_10_06-052904.dat/
 nxy=1,1
 device=1/xs

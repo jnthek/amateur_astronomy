@@ -2,6 +2,8 @@ import aipy as a
 import numpy as np
 import time
 import astropy
+from datetime import datetime
+from astropy.time import Time
 
 my_time = time.gmtime(time.time())
 file_name = str(my_time.tm_year)+'_'+str(my_time.tm_mon).zfill(2)+'_'+str(my_time.tm_mday).zfill(2)+'-'+str(my_time.tm_hour).zfill(2)+str(my_time.tm_min).zfill(2)+str(my_time.tm_sec).zfill(2)+".dat"
@@ -76,16 +78,20 @@ uv['dec'] = 0.0
 uv['obsra'] = 0.0
 
 freq = np.linspace(50,100,512)
-sky = np.array(4000*(freq/50.0)**-2.7)
+sky = np.array(150*(freq/150.0)**-2.7)
 data_mask = np.zeros(512)
 
 uvw = np.array([1,2,3], dtype=np.double)
-preamble = (uvw, time.time(), (0,1))
+ut = Time(datetime.utcnow(), scale='utc')
+preamble = (uvw, ut.jd, (0,1))
 data = np.ma.array(sky, mask=data_mask, dtype=np.complex64)
 uv.write(preamble,data)
 
 uvw = np.array([1,2,3], dtype=np.double)
-preamble = (uvw, time.time(), (0,1))
+ut = Time(datetime.utcnow(), scale='utc')
+preamble = (uvw, ut.jd, (0,1))
 data = np.ma.array(2*sky, mask=data_mask, dtype=np.complex64)
 uv.write(preamble,data)
 del(uv)
+
+#preamble = (uvw, time.time(), (0,1))
