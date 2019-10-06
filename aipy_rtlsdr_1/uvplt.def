@@ -1,0 +1,5 @@
+vis      = 2019_10_06-064818.dat/
+line     = channel,1,10,300,1
+axis     = time,real
+device   = 1/xs
+nxy      = 1,1
