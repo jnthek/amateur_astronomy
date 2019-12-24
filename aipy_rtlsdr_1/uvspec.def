@@ -1,4 +1,4 @@
-vis      = 2019_10_06-104815.dat/
-axis     = freq,amp
+vis      = 2019_12_23-140915.dat/
+axis     = freq,real
 device   = 1/xs
 nxy      = 1,1
