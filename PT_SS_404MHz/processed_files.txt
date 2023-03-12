@@ -1,0 +1,11 @@
+./processed_txt/dec_0.txt
+./processed_txt/dec_25.txt
+./processed_txt/dec_30.txt
+./processed_txt/dec_5.txt
+./processed_txt/dec_52.txt
+./processed_txt/dec_60.txt
+./processed_txt/dec_70.txt
+./processed_txt/dec_80.txt
+./processed_txt/dec__10.txt
+./processed_txt/dec__20.txt
+./processed_txt/dec__5.txt
