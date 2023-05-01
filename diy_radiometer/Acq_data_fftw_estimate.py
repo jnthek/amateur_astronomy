@@ -9,7 +9,7 @@ import sys
 import subprocess
 from subprocess import PIPE
 
-fc = int(78e6)
+fc = int(145e6)
 fs = int(2e6)
 NFFT = int(4096) 
 t_int = int(2)
@@ -65,9 +65,9 @@ while True:
         hf['data/timestamps'].resize((len_old_data + 1), axis=0)
         hf['data/timestamps'][-1:] = time.time()
 
-        p = subprocess.Popen(["rtl_power_fftw_estimate","-f",str(fc),"-b",str(NFFT),"-g",str(gain),"-l","-r",str(fs),"-t",str(t_int),"-m","spectra"], stdout=PIPE, stderr=PIPE)
+        p = subprocess.Popen(["rtl_power_fftw_estimate","-f",str(fc),"-b",str(NFFT),"-g",str(gain),"-l","-r",str(fs),"-t",str(t_int),"-m","/tmp/spectra"], stdout=PIPE, stderr=PIPE)
         stdout, stderr = p.communicate()
-        spectrum = np.fromfile("spectra.bin", dtype=np.float32)
+        spectrum = np.fromfile("/tmp/spectra.bin", dtype=np.float32)
 
         temperature = ser.readline().decode('ascii').strip()
         print (temperature)
