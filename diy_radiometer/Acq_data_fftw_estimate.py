@@ -8,13 +8,29 @@ from time import sleep
 import sys
 import subprocess
 from subprocess import PIPE
+import argparse
 
-fc = int(145e6)
-fs = int(2e6)
-NFFT = int(4096) 
-t_int = int(2)
-gain = int(254)
+parser = argparse.ArgumentParser(description='Acquire data from three state radiometer')
+parser.add_argument('-f', metavar='freq_c', help='Centre frequency (Hz)', nargs='?', default=78e6, type=float)
+parser.add_argument('-s', metavar='freq_s', help='Sampling frequency (Hz)', nargs='?', default=2e6, type=float)
+parser.add_argument('-g', metavar='gain',  help='SDR gain (dB)', nargs='?', default=25.4, type=float)
+parser.add_argument('-i', metavar='t_int', help='Integration time (s)', nargs='?', default=2, type=int)
+parser.add_argument('-N', metavar='NFFT', help='NFFT', nargs='?', default=4096, type=int)
 
+args = parser.parse_args()
+
+fc = int(args.f)
+fs = int(args.s)
+NFFT = int(args.N) 
+t_int = int(args.i)
+gain = int(args.g)*10
+
+print("Acq params")
+print("fc="+str(fc/1e6)+" MHz")
+print("fs="+str(fs/1e6)+" MHz")
+print("NFFT="+str(NFFT))
+print("Gain="+str(gain))
+print("t_int="+str(t_int)+" s")
 timestr = time.strftime("%Y%m%d-%H%M%S")
 h5_file = str(timestr)+"_fftw.h5"
 
