@@ -88,7 +88,7 @@ while True:
             ser.write(bytes("H", 'ascii'))
             print ("Hot, Freq =", str(freq_list_float[freq_index]/1e6), "MHz")
 
-        fc = freq_list_float[freq_index]
+        fc = int(freq_list_float[freq_index])
         hf['data/fc'].resize((len_old_data + 1), axis=0)
         hf['data/fc'][-1:] = fc
 
