@@ -1,0 +1,26 @@
+#! /usr/bin/python3
+
+import argparse
+from datetime import datetime
+import numpy as np
+import ephem
+
+'''
+Uses info from https://rhodesmill.org/pyephem/quick.html
+'''
+
+parser = argparse.ArgumentParser(description="lstcal - find the current LST for a latitude and longitude. Default location is Perth, WA")
+parser.add_argument('-l', metavar='latitude', default=-31.9523, help='Latitude in decimal degrees. Default is Perth, WA, i.e. -31.9523')
+parser.add_argument('-g', metavar='longitude', default=115.8613, help='Longitude in decimal degrees. Default is Perth, WA, i.e. 115.8613')
+
+args = parser.parse_args()
+lat_deg = float(args.l)
+lon_deg = float(args.g)
+
+Sky_observer = ephem.Observer()
+Sky_observer.lat = str(lat_deg)
+Sky_observer.lon = str(lon_deg)
+Sky_observer.elevation = 0
+Sky_observer.date = datetime.utcnow()
+ra_rad, dec_rad = Sky_observer.radec_of(0, np.pi/2)
+print ("LST =",ra_rad*12/np.pi, "hrs")
