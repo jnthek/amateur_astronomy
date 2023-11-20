@@ -1,2 +1,0 @@
-If /dev/ttyUSB0 does not show up, remove "brltty" via apt-remove
-Install avahi-daemon for .local type ssh access 
